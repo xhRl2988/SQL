@@ -1,0 +1,2648 @@
+select * from student_master;    
+select * from hakgwa_code;
+select * from sales_master;
+
+desc student_master;
+desc hakgwa_code;
+desc sales_master;
+
+order by [내용] asc
+order by [내용] desc
+
+primary key(sales_no,product) primary key 여러개 넣는법
+
+rollback;  롤백
+
+union   합치고 중복을 제거한 상태로 나온다
+
+union all   합집합
+
+intersect  교집합
+
+minus 빼기
+
+select * from r
+intersect
+select * from s;
+
+select * from r
+union
+select * from s;
+
+set linesize 300;      글 크기
+
+commit  롤백해도 안사라짐
+
+delete 삭제   drop 삭제
+
+데이터 사전
+desc user_constraints;
+
+desc user_cons_columns;
+ORDER BY 1;
+
+테이블 생성 create
+기초자료 등록 insert
+등록된 자료 검색 select
+등록된 자료 수정 update
+등록된 자료 삭제 delete
+
+nvl
+
+
+create table student_master (
+        hakbun     number(7) primary key,
+        name       varchar2(20),
+        jumin_no   char(13),
+        hakgwa     char(3)
+);
+[결과]
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ HAKBUN                                    NOT NULL NUMBER(7)
+ NAME                                               VARCHAR2(20)
+ JUMIN_NO                                           CHAR(13)
+ HAKGWA                                             CHAR(3)
+===========================================================================
+
+create table student_master (
+        hakbun     number(7),
+        name       varchar2(20),
+        jumin_no   char(13),
+        hakgwa     char(3),
+        primary key(hakbun)
+);
+[결과]
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ HAKBUN                                    NOT NULL NUMBER(7)
+ NAME                                               VARCHAR2(20)
+ JUMIN_NO                                           CHAR(13)
+ HAKGWA                                             CHAR(3)
+=====================================================================
+
+
+
+create table student_master (
+       hakbun     number(7),
+       name       varchar2(20),
+       jumin_no   char(13),
+       hakgwa     char(3)
+ );
+
+ alter table student_master add primary key(hakbun);
+
+
+
+
+
+
+insert into student_master values (2020001,'홍길동','8103101234567','110');
+insert into student_master values (2020002,'김선수','8012121345901','100');
+insert into student_master values (2020003,'이영미','8001122678923','100');
+insert into student_master values (2020004,'최나연','8007252727277','130');
+
+select * from student_master;
+[결과]
+    HAKBUN NAME                                     JUMIN_NO                   HAKGWA
+---------- ---------------------------------------- -------------------------- ------
+   2020001 홍길동                                   8103101234567              110
+   2020002 김선수                                   8012121345901              100
+   2020003 이영미                                   8001122678923              100
+   2020004 최나연                                   8007252727277              130
+
+==============================================================
+rollback;
+
+set linesize 300;
+
+commit;     롤백 해도 안사라짐
+
+create table hakgwa_code (
+         hakgwa      char(3) primary key,
+         hak_name   varchar2(20)
+);
+
+insert into hakgwa_code values ('100','경영학과');
+insert into hakgwa_code values ('110','컴퓨터공학과');
+insert into hakgwa_code values ('120','수학과');
+insert into hakgwa_code values ('130','국어');
+
+alter table student_master add
+(
+foreign key (hakgwa) references hakgwa_code (hakgwa)
+);
+                                                     존나 위험 존나 위험
+                존나 위험 존나 위험   ***    [ delete haklgwa_code]  ***  존나 위험 존나 위험 
+                                                     존나 위험 존나 위험
+
+delete
+
+
+drop table student_master;
+
+Table dropped.
+
+drop table hakgwa_code;
+
+Table dropped.
+
+
+create table hakgwa_code (
+         hakgwa      char(3) primary key,
+         hak_name   varchar2(20)
+);
+  
+
+create table student_master (
+        hakbun     number(7) primary key,
+        name       varchar2(20),
+        jumin_no   char(13),
+        hakgwa     char(3),
+    constraint fk_student_master_hakgwa
+        foreign key (hakgwa) references hakgwa_code (hakgwa)
+);
+
+
+
+  constraint fk_student_master_hakgwa foreign key (hakgwa) references hakgwa_code (hakgwa)
+
+
+
+create table sales_master (
+   saleyyyy    number(4),
+   saleno      number(4),
+   saleid       varchar2(10)
+                 constraint sales_master_saleid_uq unique,
+   job          char(3)         not null,
+   pay          number(10)
+                 constraint sales_master_pay_ck check(pay >=0),
+   pay_grade number(2)
+                 constraint sales_master_saleid_nn not null,
+   joindate    date,
+   idate        timestamp default sysdate,
+   constraint  sales_master_pk primary key(saleyyyy, saleno)
+);
+
+결과
+
+ Name
+                                                               Null?          Type
+ ------------------------------------------------------------------------------ --------------------------
+ SALEYYYY
+                                                               NOT NULL       NUMBER(4)
+ SALENO
+                                                               NOT NULL       NUMBER(4)
+ SALEID
+                                                                              VARCHAR2(10)
+ JOB
+                                                               NOT NULL       CHAR(3)
+ PAY
+                                                                              NUMBER(10)
+ PAY_GRADE
+                                                               NOT NULL       NUMBER(2)
+ JOINDATE
+                                                                              DATE
+ IDATE
+                                                                              TIMESTAMP(6)
+
+
+
+insert into 
+   values (2021,1001, '자룡', '110',3000000, 21, to_date('20210402','yyyymmdd'),sysdate);
+insert into sales_master
+   values (2021,1002, '유비', '110',3700000, 22, to_date('20210403','yyyymmdd'),sysdate);
+insert into sales_master
+   values (2021,1003, '관우', '110',4300000, 23, to_date('20210405','yyyymmdd'),sysdate);
+insert into sales_master
+   values (2021,1004, '장비', '110',4200000, 24, to_date('20210411','yyyymmdd'),sysdate);
+
+결과
+  SALEYYYY     SALENO SALEID             JOB       PAY     PAY_GRADE    JOINDATE    IDATE
+---------- ---------- -------------------- ------ ---------- ---------- -------- ---------------------------------
+      2021       1001 자룡                   110       3000000        21 21/04/02   23/03/21   11:39:44.000000
+      2021       1002 유비                   110       3700000        22 21/04/03   23/03/21   11:41:25.000000
+      2021       1003 관우                   110       4300000        23 21/04/05   23/03/21   11:41:25.000000
+      2021       1004 장비                   110       4200000        24 21/04/11   23/03/21   11:41:26.000000
+
+
+select saleno,
+to_char(joindate,'yyyymmdd hh24:mi:ss') jojndate,
+to_char(idate,'yyyymmdd hh24:mi:ss')"system"from sales_master;
+
+insert into sales_master
+   (saleyyyy,saleno,saleid,job,pay,pay_grade)
+values (2021,1006,'방통','140',4300000,23);
+
+
+insert into sales_master
+   (saleyyyy,saleno,saleid,job,pay,pay_grade)
+values (2021,1007,'주유','140',-10,23);
+
+
+Date Dictionary(데이터 사전)
+
+desc user_constraints;
+
+desc user_cons_columns;
+
+
+select table_name, constraint_name
+   from user_constraints
+   where table_name = 'SALES_MASTER'
+   order by 1;   
+
+
+
+
+select table_name, constraint_name
+   from user_constraints
+   where table_name = upper('&table_name')
+   order by 2;   
+=========================================
+3.2.1 Entity 생성
+
+
+select substr(a.column_name,1,15) column_name,
+   decode(b.constraint_type,
+   'P','PRIMARY KEY',
+   'U','UNIQUE KEY',
+   'C','CHECK OR NOT NULL',
+   'R','FOREIGN KEY') constraint_type,
+a.constraint_name
+from user_cons_columns a, user_constraints b
+where a.table_name =upper('&table_name')
+and a.table_name = b.table_name
+and a.constraint_name = b.constraint_name
+order by 1;
+
+select * 
+from &table_name;
+원하는 테이블 검색할때: & 변수명 
+& = 입력받는것
+
+create table new_sales_master as select * from sales_master;
+   where hakgwa = '100';
+이미 만들어진 sales_master의 모든것과 들어있는 data까지 모두 new_sales_master로 만들어지고 생성
+
+create table newpart_sales_master as select * from sales_master
+   where job = '110';
+이미 만들어진 sales_master의 모든것과 들어있는 data를 where 조건에 맞는 data만 생성
+
+-not null을 제외한 제약조건은 복사되지 않는다.
+====================================
+
+
+select hakbun,name,jumin_no from student_master ORDER BY jumin_no desc;
+결과 나이순
+HAKBUN NAME                                     JUMIN_NO
+---------- ---------------------------------------- --------------------------
+   2020001 홍길동                                   8103101234567
+   2020002 김선수                                   8012121345901
+   2020004 최나연                                   8007252727277
+   2020003 이영미                                   8001122678923
+
+select hakbun,name,jumin_no from student_master ORDER BY 2;
+결과 이름 가나다순
+    HAKBUN NAME                                     JUMIN_NO
+---------- ---------------------------------------- --------------------------
+   2020002 김선수                                   8012121345901
+   2020003 이영미                                   8001122678923
+   2020004 최나연                                   8007252727277
+   2020001 홍길동                                   8103101234567
+
+
+select hakbun "학번",name "이름",jumin_no"jumin_number" from student_master;
+결과
+      학번 이름                                     jumin_number
+---------- ---------------------------------------- --------------------------
+   2020001 홍길동                                   8103101234567
+   2020002 김선수                                   8012121345901
+   2020003 이영미                                   8001122678923
+   2020004 최나연                                   8007252727277
+
+select hakbun "학번",name "이름", substr(jumin_no,1,6)||'_'||substr(jumin_no,7,7)"jumin-number"from student_master;
+결과
+      학번 이름                                     jumin-number
+---------- ---------------------------------------- -----------------------------------------
+   2020001 홍길동                                   810310_1234567
+   2020002 김선수                                   801212_1345901
+   2020003 이영미                                   800112_2678923
+   2020004 최나연                                   800725_2727277
+
+select hakbun "학번",name "이름", substr(jumin_no,1,6)||'_'||substr(jumin_no,7,7)"jumin-number",
+decode(substr(jumin_no,7,1),
+'1','남자',
+'2','여자',
+'3','남자',
+'4','여자')"성별"
+from student_master;
+결과
+      학번 이름                              성별      jumin-number      
+---------- ---------------------------------------- --------------------------------------------- ------------
+   2020001 홍길동                         남자     810310_1234567
+                                               
+   2020002 김선수                         남자     801212_1345901
+                                              
+   2020003 이영미                         여자     800112_2678923
+                                               
+   2020004 최나연                         여자     800725_2727277
+
+
+select hakbun "학번",name "이름", substr(jumin_no,1,6)||'_'||substr(jumin_no,7,7)"jumin-number",
+decode(substr(jumin_no,7,1),
+'1','남자',
+'2','여자',
+'3','남자',
+'4','여자')"성별",
+substr(jumin_no,7)
+from student_master;
+
+결과
+
+jumin-number                            성별         SUBSTR(JUMIN_NO,7)
+---------- ----------------------- ------------ ----------------------------------------
+   2020001 홍길동                                   810310_1234567
+                                               남자         1234567
+   2020002 김선수                                   801212_1345901
+                                               남자         1345901
+   2020003 이영미                                   800112_2678923
+                                               여자         2678923
+   2020004 최나연                                   800725_2727277
+                                               여자         2727277
+
+select hakbun "학번",name "이름", substr(jumin_no,1,6)||'_'||substr(jumin_no,7,7)"jumin-number",
+decode(substr(jumin_no,7,1),
+'1','남자',
+'2','여자',
+'3','남자',
+'4','여자')"성별",
+substr(jumin_no,7),
+'19'||substr(jumin_no,1,2)||'-'||substr(jumin_no,3,2)||'-'|| substr(jumin_no,5,2)as"생년월일"
+from student_master;
+
+
+결과                                                   
+                                                                 jumin-number   
+      학번 이름                           성별         SUBSTR(JUMIN_NO,7)                                    생년월일
+---------- ---------------------------------------- ------------------------------------------------------------------
+   2020001 홍길동                                   810310_1234567
+                                               남자         1234567                                                  1981-03-10
+   2020002 김선수                                   801212_1345901
+                                               남자         1345901                                                  1980-12-12
+   2020003 이영미                                   800112_2678923
+                                               여자         2678923                                                  1980-01-12
+   2020004 최나연                                   800725_2727277
+                                               여자         2727277                                                  1980-07-25
+
+추가		add
+alter table hakgwa_code add temp_add1 varchar2(8);
+alter table hakgwa_code add temp_add2 varchar2(10); 
+결과
+ Name
+                                                               Null?    Type
+ -------------------------------------------------------------------------------------------------------------
+ HAKGWA
+                                                               NOT NULL CHAR(3)
+ HAK_NAME
+                                                                        VARCHAR2(20)
+ TEMP_ADD1
+                                                                        VARCHAR2(8)
+ TEMP_ADD2
+                                                                        VARCHAR2(10)
+
+  
+  
+삭제		drop column
+alter table hakgwa_code drop column temp_add1;     
+결과
+ Name
+                                                               Null?    Type
+ -----------------------------------------------------------------------------------------
+ HAKGWA
+                                                               NOT NULL CHAR(3)
+ HAK_NAME
+                                                                        VARCHAR2(20)
+ TEMP_ADD2
+                                                                        VARCHAR2(10)
+
+
+
+컬럼명 변경		rename column
+alter table hakgwa_code rename column temp_add2 to new_add2;   
+결과
+ Name
+                                                               Null?    Type
+ -------------------------------------------------------------------------------------
+                                                               NOT NULL CHAR(3)
+ HAK_NAME
+                                                                        VARCHAR2(20)
+ NEW_ADD2
+                                                                        VARCHAR2(10)
+
+ 
+
+자료형 또는 길이변경		modify
+alter table hakgwa_code modify new_add2 number(20);  
+결과
+ Name
+                                                               Null?    Type
+ ----------------------------------------------------------------------------------------------
+ HAKGWA
+                                                               NOT NULL CHAR(3)
+ HAK_NAME
+                                                                        VARCHAR2(20)
+ NEW_ADD2
+                                                                        NUMBER(20)
+
+
+create table grade_code_tbl (
+   grade   char(1)primary key,
+   grade_name varchar2(10)
+);
+
+create table city_code_tbl (
+   city   char(2) primary key,
+   city_name varchar2(10)
+);
+
+
+create table product_code_tbl (
+   product   char(13) primary key,
+   product_name   varchar2(30),
+   product_price   number(6)
+);
+
+
+insert into product_code_tbl
+   values ('8801234567890','축구공FIFA_A',25000);
+insert into product_code_tbl
+   values ('8801234567891','축구공',15000);
+insert into product_code_tbl
+   values ('8801234567892','야구공 시합용',12000);
+insert into product_code_tbl
+   values ('8801234567893','야구공 연습용',5000);
+insert into product_code_tbl
+   values ('8801234567894','마스크KF94*10',15000);
+insert into product_code_tbl
+   values ('8801234567895','마스크KF80*10',13500);
+insert into product_code_tbl
+   values ('8801234567896','루미큐브_대',25000);
+insert into product_code_tbl
+   values ('8801234567897','루미큐브_중',20000);
+
+
+insert into grade_code_tbl 
+ values ('A','최우수');
+insert into grade_code_tbl 
+ values ('B','우수');
+insert into grade_code_tbl 
+ values ('C','보통');
+insert into grade_code_tbl 
+ values ('D','신입');
+
+
+insert into city_code_tbl 
+   values ('10','서울');
+insert into city_code_tbl
+   values('20','경기');
+insert into city_code_tbl 
+   values('30','충북');
+insert into city_code_tbl 
+   values('40','충남');
+insert into city_code_tbl 
+   values('50','전북');
+insert into city_code_tbl 
+   values('60','전남');
+insert into city_code_tbl 
+   values('70','경북');
+insert into city_code_tbl 
+   values('80','경남');
+insert into city_code_tbl 
+   values('90','강원');
+
+create table member_tbl (
+   member_no number(5) primary key,
+   member_name   varchar2(20),
+   member_phone   varchar2(13),
+   member_addr  varchar2(50),
+   in_date   date,
+   grade   char(1),
+   city   char(2)
+);
+
+
+insert into member_tbl
+   values(11001,'박민식','01011111234','서울시 서초대로1길 10, 1101-12','2020-02-10','A','10');
+insert into member_tbl
+   values(11002,'양재만','01022222345','경기도 성남시 중원구 시민로7길 10-2','2020-01-23','A','20');
+insert into member_tbl
+   values(12010,'김일용','01033333456','대전광역시 서구 문정로 171','2020-03-10','B','30');
+insert into member_tbl
+   values(12022,'서만기','01023232345','경기도 수원시 팔달구 정조로 666-10','2020-12-12','A','20');
+
+
+select member_no "번호",member_name "너의 이름은", 
+substr(member_phone,1,3)||'-'||substr(member_phone,4,4)||'-'||substr(member_phone,8,4)"전화번호" 
+from member_tbl;
+결과
+      번호 이름                                     전번
+---------- ---------------------------------------- -----------------------------------------------------------------------
+     11001 박민식                                   010-1111-1234
+     11002 양재만                                   010-2222-2345
+     12010 김일용                                   010-3333-3456
+     12022 서만기                                   010-2323-2345
+
+select substr(member_phone,1,3)||'-'||substr(member_phone,4,4)||'-'||substr(member_phone,8,4) "MEMBER_PHONE" 
+from member_tbl;
+
+
+update member_tbl set grade = 'B',city = '30' where member_no='11002';                           업데이트
+delete member_tbl;                                                             그냥 테이블을 삭제
+
+delete member_tbl where member_no = '11001'
+
+
+
+
+create table sales_statement_tbl (
+   sales_no   number(10),
+   member_no   number(5),
+   sales_price   number(7),
+   sales_count   number(3),
+   sales_total   number(9),
+   product   char(13),
+   sales_date   date,
+   primary key(sales_no,product)
+);
+결과 
+Table created.
+
+desc sales_statement_tbl;
+결과
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ SALES_NO                               NOT NULL NUMBER(10)
+ MEMBER_NO                                          NUMBER(5)
+ SALES_PRICE                                          NUMBER(7)
+ SALES_COUNT                                        NUMBER(3)
+ SALES_TOTAL                                         NUMBER(9)
+ PRODUCT                                NOT NULL CHAR(13)
+ SALES_DATE                                         DATE
+
+drop table sales_statement_tbl;
+
+
+insert into sales_statement_tbl values(2022100001,11001,25000,2,50000,'8801234567890','20220320');
+insert into sales_statement_tbl values(2022100002,11001,15000,1,15000,'8801234567891','20220320');
+insert into sales_statement_tbl values(2022100003,12022,25000,2,50000,'8801234567896','20220321');
+insert into sales_statement_tbl values(2022100004,12010,15000,4,60000,'8801234567894','20220321');
+
+select * from sales_statement_tbl;
+결과
+
+SALES_NO    MEMBER_NO   SALES_PRICE   SALES_COUNT   SALES_TOTAL      PRODUCT        SALES_DA
+---------- ---------- ----------- ----------- ----------- -------------------------- ---------------- -------- 
+2022100001      11001          25000           2               50000             8801234567890      22/03/20
+2022100002      11001          15000           1               15000             8801234567891      22/03/20
+2022100003      12022          25000           2               50000             8801234567896      22/03/21
+2022100004      12010          15000           4               60000             8801234567894      22/03/21
+
+roll back;
+commit;
+
+update sales_statement_tbl set sales_total = 0;
+결과
+
+  SALES_TOTAL     
+-----------------
+       0           
+       0             
+       0          
+       0            
+
+update sales_statement_tbl set sales_total=sales_price*sales_count;
+
+결과
+SALES_TOTAL                   
+--------------
+   50000
+   15000 
+   50000 
+   60000 
+
+alter table sales_statement_tbl add 
+(
+   constraint fk_sales_statement_tbl
+   foreign key(product) references product_code_tbl(product),
+   constraint fk_member_tbl
+   foreign key(member_no) references member_tbl(member_no)
+);
+
+결과
+ERROR at line 5:
+ORA-02298: cannot validate (SYSTEM.FK_MEMBER_TBL) - parent keys not found
+해결방법 
+만식이형 살리기 
+
+insert into member_tbl
+   values(11001,'박민식','01011111234','서울시 서초대로1길 10, 1101-12','2020-02-10','A','10');
+부활 성공
+재시도
+Table altered.
+성공
+
+
+
+
+
+update member_tbl in_date set in_date ='2020-03-19',city='10',grade='A'
+where member_name='박민식';
+update member_tbl in_date set in_date ='2020-03-20',city='20',grade='B'
+where member_name='양재만';
+update member_tbl in_date set in_date ='2020-03-17',city='30',grade='B'
+where member_name='김일용';
+update member_tbl in_date set in_date ='2020-03-15',city='20',grade='C'
+where member_name='서만기';
+
+
+select member_no "회원번호",member_name "성명",grade "고객등급",
+decode(grade,
+'A','최우수',
+'B','우수',
+'C','보통',
+'D','신입')"고객등급명",city "도시코드",
+from member_tbl;
+
+select member_no "회원번호",member_name "성명",grade ||'  '"고객등급",
+decode(grade,
+'A','최우수',
+'B','우수',
+'C','보통',
+'D','신입',grade)"고객등급명",city||' ' "도시코드"
+from member_tbl
+order by member_name asc;
+
+출력 날자
+select sysdate from dual;
+select to_char(sysdate,'yyyy-mm-dd') from dual;
+
+
+select member_no "회원번호",
+substr(member_phone,4,4)||'-'||substr(member_phone,7,4) "전화번호", 
+to_char(in_date,'yyyy-mm-dd') "가입일자", 
+to_char(sysdate,'yyyy-mm-dd:hh:mi:ss') "출력일시" from member_tbl;
+결과
+
+  회원번호 전화번호                                          가입일자              출력일시
+---------- --------------------------------------------- -------------------- --------------------------------------
+     11002 2222-2234                                        2020-03-20           2023-04-04:11:23:41
+     12010 3333-3345                                        2020-03-17           2023-04-04:11:23:41
+     12022 2323-3234                                        2020-03-15           2023-04-04:11:23:41
+     11001 1111-1123                                        2020-03-19           2023-04-04:11:23:41
+
+
+select b.member_no,member_name,
+a.sales_price,sales_count,sales_total,
+c.product_name,
+to_char(in_date,'yyyy-mm-dd') from member_tbl b,sales_statement_tbl a,product_code_tbl c
+where a.member_no=b.member_no
+and a.product=c.product
+order by a.sales_date asc, a.sales_total desc;
+
+
+select b.member_no,member_name,
+a.sales_price,sales_count,sales_total,
+c.product_name,
+to_char(in_date,'yyyy-mm-dd') from member_tbl b,sales_statement_tbl a,product_code_tbl c
+where a.member_no=b.member_no
+or a.product=c.product
+order by a.sales_date asc, a.sales_total desc;
+
+
+select b.member_no "회원번호",b.member_name "성명",
+substr(a.sales_price,1,2)||','|| substr(a.sales_price,2,3)"단가",a.sales_count "수량",
+substr(a.sales_total,1,2)||','|| substr(a.sales_total,2,3) "금액",
+c.product_name "상품명",
+to_char(in_date,'yyyy-mm-dd') "판매일자" from member_tbl b,sales_statement_tbl a,product_code_tbl c
+where a.member_no=b.member_no
+and a.product=c.product
+order by a.sales_date asc, a.sales_total desc;
+
+ 
+to_char(sales_price,'999,999')
+to_char(sales_total,'999,999')
+to_char(a.sales_date,'yyyy-mm-dd')
+
+
+select b.member_no 회원번호,b.member_name 성명,
+to_char(sales_price,'999,999')단가,a.sales_count 수량,
+to_char(sales_total,'999,999') 금액,
+c.product_name 상품명,to_char(a.sales_date,'yyyy-mm-dd') 판매일자 
+from member_tbl b,sales_statement_tbl a,product_code_tbl c
+where a.member_no=b.member_no
+and a.product=c.product
+order by a.sales_date asc, a.sales_total desc;
+
+
+to_char(123456,'999,999')->123,456
+to_char(1234567,'999,999.9') _> 123,456.7
+
+
+099999' -> 숫자 앞에 0을 붙인다
+S99999' -> 숫자 앞에 $기호를 붙임
+B99999' ->앞에 '0'대신 공백을 붙인다
+9999MI' -> 음수뒤에 '-'를 붙임
+
+select to_char(1234,'B9,999') from dual;
+결과
+TO_CHAR(1234
+------------
+ 1,234
+
+select to_char(0,'B9,999') from dual;
+결과
+TO_CHAR(0,'B
+------------
+
+select to_char(0,'9,999') from dual;
+결과
+TO_CHAR(0,'9
+------------
+     0
+
+
+
+
+
+
+======================================================================
+					준비
+======================================================================
+
+
+
+
+
+
+
+DDL    정의(조직)	정의 제약 조건 연산
+DML   조작	검색,갱신,삽입,삭제
+DCL    제어	commit 작업 저장,rollback 작업 취소,
+
+트랜잭션(입력,수정,삭제)
+
+외래키 (Foreign Key)테이블 생성 후 Foreign Key 추가
+이름이 달라도 외래키 설정 가능 예: T01_02   <-   T02_02
+primary key 필요 primary key가 있는 부모키가 빌려줄수있음
+예:
+
+자식 테이블
+create table temp_01(
+   t01_01    varchar2(2) primary key,
+   t01_02    varchar2(3),
+   t01_03    varchar2(10)
+);
+
+부모 테이블
+create table temp_02(
+   t02_01    varchar2(2) primary key,
+   t02_02    varchar2(3),
+   t02_03    varchar2(10)
+);
+
+alter table temp_01 add(
+   constraint   fk_temp_01   없어도 상관없음
+   foreign key (t01_02) references temp_02(t02_01)
+);
+
+drop table temp_01;
+drop table temp_02;
+
+
+
+
+alter table 없이 foreign key 설정하는 법
+
+부모 테이블 먼저 생성
+create table temp_02(
+   t02_01    varchar2(2) primary key,
+   t02_02    varchar2(3),
+   t02_03    varchar2(10)
+);
+자식 테이블에서 foreign key 설정
+create table temp_01(
+   t01_01    varchar2(2) primary key,
+   t01_02    varchar2(3),
+   t01_03    varchar2(10),
+   foreign key(t01_02) references temp_02(t02_01)
+);
+
+select length('abcd')from dual;	글자 수 4
+select length('한글')from dual;	글자 수 2
+select lengthb('abcd')from dual;	크기 4 Byte
+select lengthb('한글')from dual;	크기 6 Byte
+
+
+create/drop/alter
+
+create table emp_master (
+   emp_id   number(3) primary key,
+   emp_name   varchar2(20),
+   emp_job   varchar2(2),
+   emp_grade   number(2),
+   emp_pay   number(8)
+);
+
+create table ho_master (
+   ho_grade   number(2) primary key,
+   ho_start   number(7),
+   ho_end   number(7)
+);
+
+insert into emp_master values(101,'이기호','10',10,1000);
+insert into emp_master values(111,'정진기','10',10,1500);
+insert into emp_master values(121,'남만열','20',10,1200);
+insert into emp_master values(122,'박선영','20',20,2700);
+insert into emp_master values(123,'박순기','20',20,2500);
+insert into emp_master values(124,'최석금','30',20,2400);
+insert into emp_master values(222,'김한나','10',30,3500);
+insert into emp_master values(223,'정선희','10',30,3400);
+insert into emp_master values(224,'김민식','30',30,3900);
+insert into emp_master values(700,'우민주','20',null,null);
+insert into emp_master values(701,'황남도','10',null,null);
+
+insert into ho_master values(10,100,1999);
+insert into ho_master values(20,2000,2999);
+insert into ho_master values(30,3000,3999);
+insert into ho_master values(40,4000,4999);
+insert into ho_master values(50,5000,5999);
+insert into ho_master values(60,6000,6999);
+insert into ho_master values(70,7000,7999);
+insert into ho_master values(80,8000,8999);
+insert into ho_master values(90,9000,9999);
+
+
+select * from emp_master;
+select count(*) from emp_master;
+select count(emp_id) from emp_master;
+select count(emp_grade) from emp_master;
+select count(emp_pay) from emp_master;
+select count(emp_pay)+2 from emp_master;
+
+
+
+
+===========================================================
+				자유시간
+===========================================================
+
+
+select sum(level) as 합계
+from dual
+connect by level <=&p_n;
+
+select level as num_list
+from dual
+connect by level <=&p_n;
+
+with loop_list as
+   (select level as num_list from dual connect by level <= &p_n)
+select num_list from loop_list;
+
+포기 나중에 다시 도전 (
+with loop_list as
+  (select level as num_list from dual connect by level <= 9)
+select a.num||'*'||b.num||'='||, a.num_list * b.num_list from loop_list a, loop_list b;
+)
+
+
+commit
+트랜잭션(입력,수정,삭제) 작업 내요을 실제 DB에 저장하는 DCL 명령어
+rollback
+이전 commit한 곳까지 트랜잭션(입력,수정,삭제) 작업 내용을 취소하는 DCL 명령어
+
+
+selcet * from emp_master order by emp_id asc;  오른차순
+and order by emp_id desc;   내림차순
+
+
+select count (*) from emp_master;
+select count (emp_pay) from emp_master;
+select count (emp_id) from emp_master;
+select count (emp_pay)+2 from emp_master;
+select sum(emp_pay) from emp_master;
+
+
+GROUP BY : 특성 속성을 기준으로 그룹화하여 검색할 때 그룹화할 속성을 지정 일반적으로 그룹 함수와 같이 사용된다
+
+COUNT(열 이름) : 그룹 별로 주어진 조건에 맞는 튜플(레코드) 수를 구하는 함수
+MAX(열 이름) : 그룹 별 주어진 조건에 최대값을 구하는 함수
+MIN(열 이름) : 그룹 별 주어진 조건에 최소값을 구하는 함수
+SUM(열 이름) : 그룹 별 주어진 조건에 합계를 구하는 함수
+AVG(열 이름) : 그룹 별 주어진 조건에 평균을 구하는 함수
+
+HAVING : GROUP BY와 함께 사용되며, 그룹에 대한 조건을 지정
+ORDER BY : 특정 속성을 기준으로 정렬 
+
+select max(emp_id) from emp_master;
+select max(emp_id)+1 emp_id from emp_master;
+select min(emp_id) emp_id from emp_master;
+select sum(emp_pay) emp_pay from emp_master;
+select avg(emp_pay) emp_pay from emp_master;
+
+
+select emp_job, count(*) from emp_master
+group by emp_job;
+select emp_job, count(*) from emp_master
+group by emp_job order by emp_job;
+
+
+select emp_id as ID_NO, emp_name as 성명, emp_grade as 호봉,emp_pay 주급 from emp_master; 
+select emp_id "USER", emp_name "USER_NAME", emp_grade "PAY_GRADE" from emp_master;
+select emp_name "성 명", emp_grade "급여 등급", emp_id from emp_master;
+select emp_id "user", emp_name "user_name", emp_grade "pay_grade" from emp_master;
+
+
+select emp_id||emp_name,emp_job,emp_grade,emp_pay from emp_master;
+select emp_id||'-'||emp_name from emp_master;
+select emp_name  ||'('|| emp_id ||')' "성명(사원번호)" from emp_master; 
+
+select predicate [열이름 1] [열이름2] 
+from 테이블명;
+
+select *
+from emp_master
+order by emp_job asc;
+
+select *
+from emp_master
+order by emp_job,emp_id asc;
+
+select *
+from emp_master
+order by emp_job,emp_id desc;
+
+select *
+from emp_master
+order by emp_grade asc,
+emp_name desc;
+
+distinct : 중복된 튜플(레코드)이 있으면, 그 중 첫 번째 한 개만 검색
+
+select distinct emp_job
+from emp_master
+order by emp_job asc;
+
+select distinct emp_job,emp_grade
+from emp_master
+order by emp_job asc;
+
+where 조건 : 테이블 별칭 선정 및 조인
+
+select a.emp_id, a.emp_name,b.ho_grade
+from emp_master a,ho_master b
+where a.emp_grade=b.ho_grade
+order by a.emp_id;
+
+select a.emp_id, a.emp_name,b.ho_grade
+from emp_master a,ho_master b
+where a.emp_grade=b.ho_grade
+order by a.emp_id desc;
+
+산술 연산 : 항목 *12=35000
+비교 연산자 : =,<>,<,>=,<=
+논리 연산자 : not,and,or
+in 연산 : 항목 in (데이터1, 데이터2, 데이터3)
+between a and b 연산자 : 항목 between 최소값 and 최대값
+like : 항목 like '최%' 대표 문자를 이용해 지정된 값이 문자 패턴과 일치하는 튜플만 검색
+
+select *
+from ho_master
+where ho_start * 2>6000;
+
+select *
+from ho_master
+where ho_start + 1000 <=5000;
+
+select emp_id,emp_name,emp_job
+from emp_master
+where not emp_job !='10';
+
+select emp_id, emp_name, emp_job
+from emp_master
+where not emp_job ='10';
+
+select emp_id, emp_name, emp_grade
+from emp_master
+where emp_grade in(10,30);
+
+select emp_id, emp_name, emp_grade
+from emp_master
+where emp_grade not in(10,30);
+
+select emp_id, emp_name, emp_grade
+from emp_master
+where not emp_grade ='20';
+
+select emp_id, emp_name, emp_grade
+from emp_master
+where not emp_grade !='20';
+
+
+
+
+===========================================================================
+					공부
+===========================================================================
+
+
+DDL    정의(조직)	정의 제약 조건 연산
+DML   조작	검색,갱신,삽입,삭제
+DCL    제어	commit 작업 저장,rollback 작업 취소,
+
+트랜잭션(입력,수정,삭제)
+
+외래키 (Foreign Key)테이블 생성 후 Foreign Key 추가
+이름이 달라도 외래키 설정 가능 예: T01_02   <-   T02_02
+primary key 필요 primary key가 있는 부모키가 빌려줄수있음
+
+
+commit
+트랜잭션(입력,수정,삭제) 작업 내용을 실제 DB에 저장하는 DCL 명령어
+rollback
+이전 commit한 곳까지 트랜잭션(입력,수정,삭제) 작업 내용을 취소하는 DCL 명령어
+
+
+selcet * from emp_master order by emp_id asc;  오른차순
+and order by emp_id desc;   내림차순
+
+
+GROUP BY : 특성 속성을 기준으로 그룹화하여 검색할 때 그룹화할 속성을 지정 일반적으로 그룹 함수와 같이 사용된다
+
+COUNT(열 이름) : 그룹 별로 주어진 조건에 맞는 튜플(레코드) 수를 구하는 함수
+MAX(열 이름) : 그룹 별 주어진 조건에 최대값을 구하는 함수
+MIN(열 이름) : 그룹 별 주어진 조건에 최소값을 구하는 함수
+SUM(열 이름) : 그룹 별 주어진 조건에 합계를 구하는 함수
+AVG(열 이름) : 그룹 별 주어진 조건에 평균을 구하는 함수
+
+HAVING : GROUP BY와 함께 사용되며, 그룹에 대한 조건을 지정
+ORDER BY : 특정 속성을 기준으로 정렬 
+
+
+
+distinct : 중복된 튜플(레코드)이 있으면, 그 중 첫 번째 한 개만 검색
+
+
+where 조건 : 테이블 별칭 선정 및 조인
+
+
+산술 연산 : 항목 *12=35000
+비교 연산자 : =,<>,<,>=,<=
+논리 연산자 : not,and,or
+in 연산 : 항목 in (데이터1, 데이터2, 데이터3)
+between a and b 연산자 : 항목 between 최소값 and 최대값
+like : 항목 like '최%' 대표 문자를 이용해 지정된 값이 문자 패턴과 일치하는 튜플만 검색
+
+select * from student_master;    
+select * from hakgwa_code;
+select * from sales_master;
+
+desc student_master;
+desc hakgwa_code;
+desc sales_master;
+
+
+rollback;  롤백
+
+set linesize 300;      글 크기
+
+commit  롤백해도 안사라짐
+
+delete 삭제   drop 삭제
+
+데이터 사전
+desc user_constraints;
+
+desc user_cons_columns;
+ORDER BY 1;
+
+테이블 생성 create
+기초자료 등록 insert
+등록된 자료 검색 select
+등록된 자료 수정 update
+등록된 자료 삭제 delete
+====================================================
+			
+====================================================
+
+select a.emp_id, a.emp_name,b.ho_grade
+from emp_master a, ho_master b
+where a.emp_grade = b.ho_grade
+order by a.emp_id;
+
+
+select a.emp_id, a.emp_name,b.ho_grade
+from emp_master a, ho_master b
+where a.emp_grade = b.ho_grade
+order by a.emp_id desc;
+
+
+select a.emp_name,b.ho_grade,b.ho_start,b.ho_end
+from emp_master a, ho_master b
+where a.emp_grade = b.ho_grade
+
+
+select *
+from ho_master
+where ho_start * 2> 6000;
+
+select *
+from ho_master
+where ho_start +1000<=5000;
+
+select emp_id,emp_name,emp_job
+from emp_master
+where not emp_job !='10';
+
+select emp_id,emp_name,emp_job
+from emp_master
+where not emp_job ='10';
+
+select emp_id,emp_name,emp_job
+from emp_master
+where emp_job in(10,30);
+
+select emp_id,emp_name,emp_job
+from emp_master
+where emp_job not in(10,30);
+
+
+select emp_id,emp_name,emp_job
+from emp_master
+where not emp_job ='20';
+
+select emp_id,emp_name,emp_job
+from emp_master
+where not emp_job !='20';
+
+select emp_id,emp_name,emp_job
+from emp_master
+where (emp_grade =10)
+or(emp_grade =30);
+
+select emp_id,emp_name,emp_job
+from emp_master
+where  (emp_grade =10)
+and(emp_grade =30);
+
+
+select emp_id,emp_name,emp_pay
+from emp_master
+where emp_pay between 2000 and 3500;
+
+select emp_id,emp_name,emp_pay
+from emp_master
+where emp_pay not between 2000 and 3500;
+
+select emp_name,emp_pay
+from emp_master
+where emp_pay between 2000 and 3500;
+
+select emp_name,emp_pay
+from emp_master
+where emp_pay >= 2000 and emp_pay<= 3500;
+
+select emp_name,emp_pay
+from emp_master
+where (emp_pay >= 2000) and (emp_pay<= 3500);
+
+select emp_name,emp_pay
+from emp_master
+where (emp_pay < 2000) or (emp_pay> 3500);
+
+select emp_name, emp_job
+from emp_master
+where emp_name like '정%';
+
+select emp_name, emp_job
+from emp_master
+where not emp_name like '정%';
+
+select *
+from emp_master
+where (emp_name like '%정%')or(emp_name like '__기') or (not emp_name like '기%');
+
+select emp_name, emp_job
+from emp_master
+where emp_name = '%민%';
+안나옴
+no rows selected
+
+
+*******************
+		nvl
+*******************
+
+
+연산의 실수
+emp_pay = null
+null은 비교 연산자를 사용할 수 없다.
+emp_pay != null
+null은 비교 연산자를 사용할 수 없다.
+emp_pay = "
+빈 문자열은 비교 연산자를 사용할 수 없다.
+emp_pay = null
+수치 값에 null을 사칙연산하면 결과는 null 이다
+
+올바른 사용
+
+emp_pay is null
+null을 조건으로 사용할 때
+emp_pay is not null
+null을 조건으로 사용할 때
+emp_pay is null
+빈 문자열은 null을 사용(insert 시 항목에 null 값 적용)
+ho_start + nvl(emp_pay,0)
+null 값일 때 0(영) 으로 대체, 연산 가능
+
+select avg(nvl(emp_pay,0)) from emp_master;
+
+select emp_id, emp_name, emp_grade
+from emp_master
+where emp_grade is null;
+
+select emp_id, emp_name, emp_grade
+from emp_master
+where emp_grade is not null;
+
+
+====================================================
+문제
+====================================================
+회원마스터 (emp_master)에 있는 시간 급여(emp_pay)에 일괄 1,500원을 올려서 8시간 급여를 지급할
+예정이다. 시간 급여 책정이 안된 경우도 위 내용에 맞게 처리할 것이다
+필요한 항목은 사원번호(emp_id), 성명(emp_name), 직무코드(emp_job) 올리기 전 시간 급여(emp_pay),
+올린 후 시간 급여 금액, 올린 후 금액에 8시간을 지급할 금액을 출력한다.
+================================================
+정답
+================================================
+
+select emp_id,emp_name,emp_job,
+nvl(emp_pay,0) "기본 금액",
+nvl(emp_pay,0)+1500 "급여 상승 후 금액",
+nvl(emp_pay+1500,0+1500)*8 " 최종 금액"
+from emp_master;
+
+
+*****************
+nvl(a,b)
+a - null인지 체크할 컬럼 혹은 값
+b - 체크한 a의 값이  null이면 보여줄 컬럼 혹은 값
+nvl2(a,b,c)
+a - null인지 체크할 컬럼 혹은 값
+b - 체크한 a의 값이  null이면 보여줄 컬럼 혹은 값
+c - 체크한 a의 값이 null이면 보여줄 컬럼 혹은 값
+*****************
+
+select emp_id,emp_pay,
+nvl(emp_pay,0),
+nvl2(emp_pay,'not null','null')
+from emp_master
+order by emp_id;
+
+select emp_id,emp_pay,
+nvl(emp_pay,0),
+nvl2(emp_pay,emp_name,9999)
+from emp_master
+order by emp_id;
+
+
+select emp_id,emp_pay,
+nvl(emp_pay,0),
+nvl2(emp_pay, 9999, emp_name)
+from emp_master
+order by emp_id;
+
+select emp_id,emp_name,emp_job,
+to_char(nvl(emp_pay, 0), '999,999')||'원' "기본금액" ,
+to_char(((nvl(emp_pay, 0) + 1500) * 8), '999,999')||'원' 인상후_지급금액
+from emp_master
+order by emp_id;
+
+select emp_job, count(*)  from emp_master
+group by emp_job order by emp_job ;
+
+
+
+select emp_job 직무,count(*) "인원 수", sum(emp_pay) "급여 합",round(avg(emp_pay)) "평균",
+min(emp_pay) 최저급여,max(emp_pay) 최고급여
+from emp_master
+group by emp_job
+order by avg(emp_pay) desc;
+
+
+select emp_job 직무,count(*) "인원 수",
+sum(emp_pay) "급여 합",round(avg(emp_pay)) "평균",min(emp_pay) 최저급여,max(emp_pay) 최고급여
+from emp_master
+group by emp_job
+having sum(emp_pay) > 6300
+order by avg(emp_pay) desc;
+
+
+select emp_job 직무,count(*) "인원 수", sum(emp_pay) "급여 합",round(avg(emp_pay)) 평균
+,min(emp_pay) 최저급여,max(emp_pay) 최고급여
+from emp_master
+group by emp_job
+having (sum(emp_pay) > 6300) 
+and (emp_job  !=10)
+order by avg(emp_pay) desc;
+
+select emp_job 직무,count(*) "인원 수", sum(emp_pay) "급여 합",round(avg(emp_pay)) 평균
+,min(emp_pay) 최저급여,max(emp_pay) 최고급여
+from emp_master
+where emp_id !=101
+group by emp_job
+having (sum(emp_pay) > 6300) 
+order by avg(emp_pay) desc;
+
+등가 조인
+
+select a.emp_id, substr(a.emp_name,1,3),a.emp_pay,b.ho_grade,b.ho_start,b.ho_end
+from emp_master a, ho_master b
+where a.emp_grade = b.ho_grade
+order by a.emp_id;
+
+비등가 조인
+
+select a.emp_id, a.emp_grade, a.emp_pay, b.ho_start, b.ho_end
+from emp_master a,ho_master b
+where a.emp_pay between b.ho_start and b.ho_end;
+
+
+등가 조인과 비등가 조인을 정리해서 설명하자
+
+조인 조건에 '='를 이용하는 조인을 등가 조인
+'='를 사용하지 않는 조인을 비 등가 조인이라고 한다
+
+
+외부 조인
+왼쪽 외부 조인   오른쪽 외부 조인
+
+왼쪽 외부 조인
+select a.emp_id, a.emp_grade, a.emp_pay,b.ho_grade, b.ho_start, b.ho_end
+from emp_master a, ho_master b
+where a.emp_grade = b.ho_grade;
+
+오른쪽 외부 조인
+select a.emp_id, a.emp_grade, a.emp_pay,b.ho_grade, b.ho_start, b.ho_end
+from emp_master a, ho_master b
+where a.emp_grade = b.ho_grade(+);
+
+
+
+select a.emp_id, a.emp_grade, a.emp_pay,b.ho_grade, b.ho_start, b.ho_end
+from emp_master a, ho_master b
+where a.emp_grade(+) = b.ho_grade;
+
+ho_master에는 데이터(레코드)가 있고
+emp_master 에는 해당 조건에 맞는 항목(필드 emp_master의 값)이 없어도
+ho_master 의 데이터(레코드)가 출력도리 수 있도록 참여 해야 한다 -> a.emp_grade(+)
+
+
+select emp_id, emp_name, emp_pay, nvl(emp_pay,0)+emp_id "HAP"
+from emp_master;
+
+select emp_id, emp_name, nvl(emp_pay,0), (emp_id + nvl(emp_pay,0)) HAP
+from emp_master;
+
+
+select emp_id, emp_name, sum(emp_pay)
+from emp_master;
+오류 
+
+그룹 함수는 select 절에서 단일행 함수와 그룹 함수를 함께 사용하지 못한다
+
+
+
+select sum(emp_job), sum(distinct emp_job)
+from emp_master;
+
+distinct 함수는 중복 값을 제외하는 것으로 emp_job의 중복을 제외한 합
+
+
+
+
+서브 쿼리
+추가정보를 제공할 목적으로 하나의 sql 문장 내부에 존재하는 select 문장을 말합니다
+DML에 속하는 모든 문장에 서브쿼리를 사용할 수 있습니다
+selecet문장에서 리스트로 올 수 있고(일반 서브쿼리)
+from절에 올 수 있고(인라인 뷰)
+where절(중첩 쿼리)에 올 수 있습니다
+
+
+select emp_id, emp_name, emp_pay
+,(select avg(emp_pay) from emp_master) as avg_pay
+from emp_master
+order by emp_pay;
+
+
+select * from emp_master order by nvl(emp_pay,0) desc;
+
+
+select emp_id, substr(emp_name,1,3), emp_pay
+,(select avg(emp_pay) from emp_master) as avg_pay1
+,(select avg(nvl(emp_pay,0)) from emp_master) as avg_pay2
+from emp_master
+order by emp_pay;
+
+소수점이 많아서 round() 를 사용함
+
+select emp_id, substr(emp_name,1,3), emp_pay
+,(select round(avg(emp_pay)) from emp_master) as avg_pay1
+,(select round(avg(nvl(emp_pay,0))) from emp_master) as avg_pay2
+from emp_master
+order by emp_pay;
+
+
+
+
+select emp_id, substr(emp_name,1,3),emp_pay
+from emp_master
+where emp_pay <= (select avg(emp_pay) from emp_master);
+
+
+select emp_id, substr(emp_name,1,3),nvl(emp_pay,0)
+from emp_master
+where nvl(emp_pay,0) <= (select avg(nvl(emp_pay,0)) from emp_master);
+
+
+select emp_id, substr(emp_name,1,3),nvl(emp_pay,0),
+(select round(avg(nvl(emp_pay,0))) from emp_master) as "avg"
+from emp_master
+where nvl(emp_pay,0) <= (select avg(nvl(emp_pay,0)) from emp_master);
+
+(select round(avg(nvl(emp_pay,0))) from emp_master) as "avg"
+에서 "avg" 에서 "를 넣은 이유는 소문자로 출려하기 위함이다 그냥 "없이 출력하면 AVG로 출력됨
+
+
+
+select a.emp_id, a.emp_name, nvl(a.emp_pay,0), b.avg_pay1, b.cnt1, b.avg_pay2, b.cnt2
+from emp_master a,
+(select round(avg(emp_pay)) avg_pay1, round(count(emp_pay)) cnt1,
+round(avg(nvl(emp_pay,0))) avg_pay2, round(count(nvl(emp_pay,0))) cnt2 from emp_master) b
+where nvl(emp_pay,0) <= (select avg(nvl(emp_pay,0)) from emp_master);
+
+
+select * from emp_master
+where emp_pay
+ >= (select ho_start from ho_master where ho_grade ='20');
+
+SQL> select * from emp_master
+  2  where nvl(emp_pay,0)
+  3   = (select ho_start from ho_master where ho_grade >='20');
+
+ERROR at line 3:
+ORA-01427: single-row subquery returns more than one row
+
+
+
+select *
+from emp_master
+where emp_grade in(select ho_grade from ho_master
+where ho_start between 100 and 2000);
+
+검색 조건 IN
+서브 쿼리 값이 여러 개 나와도 OK
+
+select *
+from emp_master
+where emp_grade = (select ho_grade from ho_master
+where ho_start between 100 and 2000);
+
+검색 조건이 =
+서브 쿼리의 값이 1개 이어야 한다
+
+
+
+서브쿼리의 실행 결과에 따라 단일행 서브쿼리와 다중형 서브쿼리가 잇고 비교할 열이 여러 개 인 다중열 서브쿼리가잇다
+
+단일행 서브쿼리
+실행 결과가 단한의 행으로 나오는 서브쿼리를 말한다. 서브쿼리에서 출력되는 결과가 하나이므로
+메인쿼리와 서브쿼리 결과는 다음과 같이 단일행 연산자를 사용하여 비교한다.
+단일행 연산자: 초과>, 이상>=, 같음 =, 이하 <=, 같지 않음 !=,<>,^=
+
+select * from emp_master
+where emp_pay < (select ho_end from ho_master where ho_grade = '10');
+
+
+
+select * from emp_master 
+where emp_grade = (select ho_grade from ho_master where ho_start =2000);
+
+
+select * from emp_master
+where emp_grade < (select ho_grade from ho_master where ho_start = 3000);
+
+
+
+select * from emp_master
+where emp_grade in (select ho_grade from ho_master where ho_start < 3000);
+
+다중형 서브쿼리
+검색 조건 in
+실행 결과 행이 여러 개로 나오는 서브쿼리
+
+
+
+단중행 서브쿼리
+실행 결과가 여러 개로 나오는 서브쿼리를 말하며. 
+서브쿼리 결과가 여러 개이므로 단일행 연산자는 사용할 수 없고 다중행 연산자를 사용해야 메인쿼리와 비교할수 있다 
+
+. 다중행 연산자
+in 		: 메인쿼리의 데이터가 서브쿼리의 결과 중 하나라도 일치한 데이터가 있으면 true
+any,some		: 메인쿼리의 조건식을 만족하는 서브쿼리의 결과가 하나 이상이면 treu
+all		: 메인쿼리의 조건식을 서브쿼리의 결과 모두가 만족하면 true
+exits		: 서브쿼리의 결과가 존재하면, 행이 하나 이상이면 true
+
+
+
+select * from emp_master
+where emp_grade in (select ho_grade from ho_master where ho_start <3000);
+
+select * from emp_master
+where emp_grade  =some (select ho_grade from ho_master where ho_start <3000);
+
+select * from emp_master
+where emp_grade  =any (select ho_grade from ho_master where ho_start <3000);
+
+
+
+
+
+
+
+
+
+
+
+create table test_dept_code(
+dept char(2) primary key,
+name varchar2(30)
+);
+
+create table test_sudent_master(
+hakbun number(5) primary key,
+name varchar2(20),
+jumin varchar2(14),
+phone varchar2(13),
+dept char(2),
+status char(1),
+foreign key(dept) references test_dept_code(dept)
+);
+
+다시 
+create table test_dept_code(
+dept char(2) primary key,
+name varchar2(30)
+);
+
+create table test_student_master(
+hakbun number(5) primary key,
+name varchar2(20),
+jumin varchar2(14),
+phone varchar2(13),
+dept char(2),
+status char(1)
+);
+
+
+alter table test_student_master add(
+foreign key(dept) references test_dept_code(dept)
+);
+
+============================================================
+
+부모키 먼저 생성한다
+
+create table test_dept_code(
+dept char(2) primary key,
+name varchar(30)
+);
+drop table test_dept_code;
+
+create table test_student_master(
+hakbun number(5) primary key,
+name varchar2(20),
+jumin varchar2(14),
+phone varchar2(13),
+dept char(2),
+status char(1),
+foreign key(dept) references test_dept_code(dept)
+);
+drop table test_student_master;
+
+alter table test_student_master add(
+foreign key(dept) references test_dept_code(dept)
+);
+
+부모키 먼저 insert 해준다 아니면 오류남
+
+insert into test_dept_code values('10','SW개발');
+insert into test_dept_code values('20','스마트웹');
+insert into test_dept_code values('30','금융회계');
+insert into test_dept_code values('40','부사관');
+
+select * from test_dept_code;
+
+insert into test_student_master values(22001,'강길호','951101-1234567','010-1234-5678','10','1');
+insert into test_student_master values(22002,'정호원','950109-1545678','010-5555-5151','10','1');
+insert into test_student_master values(22003,'진선미','960410-2345679','010-6789-8989','20','1');
+insert into test_student_master values(22004,'조진형','930515-1345680','010-4444-4141','20','1');
+insert into test_student_master values(22005,'이미자','950529-2345681','010-5555-5151','10','1');
+insert into test_student_master values(22006,'김명기','950703-1345682','010-6789-8989','40','1');
+insert into test_student_master values(22007,'나호문','951211-1345685','010-7777-8989','30','2');
+
+select * from test_student_master;
+
+
+create table test_student_test(
+semester number(5),
+hakbun number(5),
+std1 number(3),
+std2 number(3),
+std3 number(3),
+primary key(semester,hakbun)
+);
+drop table test_student_test;
+
+insert into test_student_test values(20221,22001,96,100,94);
+insert into test_student_test values(20221,22002,80,82,90);
+insert into test_student_test values(20221,22003,76,78,88);
+insert into test_student_test values(20221,22004,80,90,92);
+insert into test_student_test values(20221,22005,84,90,96);
+insert into test_student_test values(20221,22006,90,94,84);
+insert into test_student_test values(20221,22007,96,98,100);
+insert into test_student_test values(20222,22001,98,98,100);
+insert into test_student_test values(20222,22002,90,84,98);
+insert into test_student_test values(20222,22003,86,88,90);
+insert into test_student_test values(20222,22004,88,96,94);
+insert into test_student_test values(20222,22005,86,92,94);
+insert into test_student_test values(20222,22006,92,100,90);
+insert into test_student_test values(20222,22007,98,100,98);
+
+update test_student_test set std1=92,std2=94
+where semester = 20222 
+and hakbun=22002;
+
+select semester,hakbun,std1,std2,std3, (std1+std2+std3), (std1+std2+std3)/3
+from test_student_test
+order by (std1+std2+std3) desc;
+
+=================================================================
+
+select * from emp_master
+where emp_grade = ANY(select ho_grade from ho_master where ho_start<3000);
+
+select * from emp_master
+where emp_grade = SOME(select ho_grade from ho_master where ho_start<3000);
+
+select * from ho_master
+where ho_start<ANY(select emp_pay from emp_master where emp_grade=20);
+
+select * from ho_master
+where ho_start < (select max(emp_pay) from emp_master where emp_grade =20);
+
+select * from ho_master
+where ho_start>ANY(select emp_pay from emp_master where emp_grade=20);
+
+select * from ho_master
+where ho_start>(select min(emp_pay)from emp_master where emp_grade=20);
+
+select * from ho_master
+where ho_end <ALL (select emp_pay from emp_master where emp_job=10);
+
+select * from ho_master
+where ho_end <ANY (select emp_pay from emp_master where emp_job=10);
+
+select * from emp_master
+where exists ( select ho_start from ho_master where ho_grade=10);
+
+select * from emp_master
+where not exists ( select ho_start from ho_master where ho_grade=10);
+
+select * from emp_master
+where (emp_job,emp_grade) in (select ho_grade,ho_grade from ho_master);
+
+
+==================================================
+			다시
+==================================================
+create table test_dept_code(
+dept char(2) primary key,
+name varchar2(30)
+);
+desc test_dept_code;
+
+create table test_student_master(
+hakbun number(5) primary key,
+name varchar2(20),
+jumin varchar2(14),
+phone varchar2(13),
+dept char(2),
+status char(1),
+foreign key(dept) references test_dept_code(dept)
+);
+desc test_student_master;
+
+insert into test_dept_code values('10','SW개발');
+insert into test_dept_code values('20','스마트웹');
+insert into test_dept_code values('30','금융회계');
+insert into test_dept_code values('40','부사관');
+select * from test_dept_code;
+
+insert into test_student_master values(22001,'김강호','951101-1234567','010-1234-5678','10','1');
+insert into test_student_master values(22002,'정호원','950109-1545678','010-5555-5151','10','1');
+insert into test_student_master values(22003,'진선미','960410-2345679','010-6789-8989','20','1');
+insert into test_student_master values(22004,'조진형','930515-1345680','010-4444-4141','20','1');
+insert into test_student_master values(22005,'이미자','950529-2345681','010-5555-5151','10','1');
+insert into test_student_master values(22006,'김명기','950703-1345682','010-6789-8989','40','1');
+insert into test_student_master values(22007,'나호문','951211-1345685','010-7777-8989','30','2');
+select * from test_student_master;
+
+insert into test_student_master values(22777,'홍길동','961101-1234567','010-1234-7777','90','1');
+insert into test_student_master values(22777,'홍길동','961101-1234567','010-1234-7777',null,'1');
+
+delete test_dept_code;
+delete test_student_master;
+
+drop table test_dept_code;
+drop table test_student_master;
+
+
+=============================================================
+				문제 풀기
+=============================================================
+
+update test_student_test set std1=92,std2=94
+where semester = 20222 
+and hakbun=22002;
+
+select a.name "이름",b.semester "학기" ,b.hakbun "학번",b.std1 "전공1",b.std2 "전공2",b.std3 "전공3", 
+(std1+std2+std3) "합", (std1+std2+std3)/3 "평균"
+from test_student_master a, test_student_test b
+where a.hakbun=b.hakbun
+order by (std1+std2+std3) desc;
+
+select a.name "이름",b.semester "학기" ,b.hakbun "학번",b.std1 "전공1",b.std2 "전공2",b.std3 "전공3", 
+(std1+std2+std3) "합", round((std1+std2+std3)/3,2) "평균"
+from test_student_master a, test_student_test b
+where a.hakbun=b.hakbun
+order by (std1+std2+std3) desc;
+
+round((숫자),(자릿수))
+
+select a.hakbun, a.name, a.jumin, b.dept, b.name
+from test_student_master a, test_dept_code b
+where a.dept = b.dept
+order by hakbun;
+
+select a.hakbun, a.name, a.jumin, b.dept, b.name
+from test_student_master a, test_dept_code b
+where a.dept = b.dept and status=1
+order by hakbun;
+
+==========================================================================
+					
+==========================================================================
+
+foreign key(dept) references test_dept_code(dept)
+
+
+alter table test_student_master add(
+foreign key(dept) references test_dept_code(dept)
+);
+
+
+insert into 테이블이름 values(12345,12345,123,123,123)
+
+1문제
+update test_student_test set std1=92,std2=94
+where semester = 20222 
+and hakbun=22002;
+2문제
+select a.name "이름",b.semester "학기" ,b.hakbun "학번",b.std1 "전공1",b.std2 "전공2",b.std3 "전공3", 
+(std1+std2+std3) "합", (std1+std2+std3)/3 "평균"
+from test_student_master a, test_student_test b
+where a.hakbun=b.hakbun
+order by (std1+std2+std3) desc;
+3문제
+select a.name "이름",b.semester "학기" ,b.hakbun "학번",b.std1 "전공1",b.std2 "전공2",b.std3 "전공3", 
+(std1+std2+std3) "합", round((std1+std2+std3)/3,2) "평균"
+from test_student_master a, test_student_test b
+where a.hakbun=b.hakbun
+order by (std1+std2+std3) desc;
+
+round((숫자),(자릿수))
+4문제
+select a.hakbun, a.name, a.jumin, b.dept, b.name
+from test_student_master a, test_dept_code b
+where a.dept = b.dept
+order by hakbun;
+5문제
+select a.hakbun, a.name, a.jumin, b.dept, b.name
+from test_student_master a, test_dept_code b
+where a.dept = b.dept and status=1
+order by hakbun;
+
+
+
+
+
+1문제 학생성적 대상자 학기, 학생의 성적 수정 
+
+update test_student_test set std1=92,std2=94
+where semester = 20222 
+and hakbun=22002;
+
+2문제 학생성적 테이블에서 전체 학생 출력할 때 총점
+및 평큔을 성적합산 기준 내리차순으로 출력
+"학기 학번 전공1 전공2 전공3 합산 평균"
+
+select a.name "이름",b.semester "학기" ,b.hakbun "학번",b.std1 "전공1",b.std2 "전공2",b.std3 "전공3", 
+(std1+std2+std3) "합", (std1+std2+std3)/3 "평균"
+from test_student_master a, test_student_test b
+where a.hakbun=b.hakbun
+order by (std1+std2+std3) desc;
+
+3문제 여기서 평균은 소수점 2자리까지 표시
+
+select a.name "이름",b.semester "학기" ,b.hakbun "학번",b.std1 "전공1",b.std2 "전공2",b.std3 "전공3", 
+(std1+std2+std3) "합", round((std1+std2+std3)/3,2) "평균"
+from test_student_master a, test_student_test b
+where a.hakbun=b.hakbun
+order by (std1+std2+std3) desc;
+
+round((숫자),(자릿수))
+
+4문제 학생마스터 테이블에서 학번을 기준으로 올림차순으로 출력 폼은
+학과명은 학과코드에서 가지고 온다.
+"학번 서명 주민번호 학과코드 학과명"
+
+select a.hakbun, a.name, a.jumin, b.dept, b.name
+from test_student_master a, test_dept_code b
+where a.dept = b.dept
+order by hakbun;
+
+5문제 학생마스터 테이블에서 상태 '1'만 선택하여 4번 문제와 같이 출력하라
+
+select a.hakbun, a.name, a.jumin, b.dept, b.name
+from test_student_master a, test_dept_code b
+where a.dept = b.dept and status=1
+order by hakbun;
+
+
+
+create table test_dept_code(
+dept char(2) primary key,
+name varchar2(30)
+);
+
+
+create table test_student_master(
+hakbun number(5) primary key,
+name varchar2(20),
+jumin varchar2(14),
+phone varchar2(13),
+dept char(2),
+status char(1),
+foreign key(dept) references test_dept_code(dept)
+);
+
+
+insert into test_dept_code values('10','SW개발');
+insert into test_dept_code values('20','스마트웹');
+insert into test_dept_code values('30','금융회계');
+insert into test_dept_code values('40','부사관');
+
+
+insert into test_student_master values(22001,'김강호','951101-1234567','010-1234-5678','10','1');
+insert into test_student_master values(22002,'정호원','950109-1545678','010-5555-5151','10','1');
+insert into test_student_master values(22003,'진선미','960410-2345679','010-6789-8989','20','1');
+insert into test_student_master values(22004,'조진형','930515-1345680','010-4444-4141','20','1');
+insert into test_student_master values(22005,'이미자','950529-2345681','010-5555-5151','10','1');
+insert into test_student_master values(22006,'김명기','950703-1345682','010-6789-8989','40','1');
+insert into test_student_master values(22007,'나호문','951211-1345685','010-7777-8989','30','2');
+
+create table test_student_test(
+semester number(5),
+hakbun number(5),
+std1 number(3),
+std2 number(3),
+std3 number(3),
+primary key(semester,hakbun)
+);
+drop table test_student_test;
+
+insert into test_student_test values(20221,22001,96,100,94);
+insert into test_student_test values(20221,22002,80,82,90);
+insert into test_student_test values(20221,22003,76,78,88);
+insert into test_student_test values(20221,22004,80,90,92);
+insert into test_student_test values(20221,22005,84,90,96);
+insert into test_student_test values(20221,22006,90,94,84);
+insert into test_student_test values(20221,22007,96,98,100);
+insert into test_student_test values(20222,22001,98,98,100);
+insert into test_student_test values(20222,22002,90,84,98);
+insert into test_student_test values(20222,22003,86,88,90);
+insert into test_student_test values(20222,22004,88,96,94);
+insert into test_student_test values(20222,22005,86,92,94);
+insert into test_student_test values(20222,22006,92,100,90);
+insert into test_student_test values(20222,22007,98,100,98);
+
+1문제 학생성적 대상자 학기, 학생의 성적 수정 
+
+update test_student_test set std1=92,std2=94
+where semester = 20222 
+and hakbun=22002;
+
+2문제 학생성적 테이블에서 전체 학생 출력할 때 총점
+및 평큔을 성적합산 기준 내리차순으로 출력
+"학기 학번 전공1 전공2 전공3 합산 평균"
+
+select a.name "이름",b.semester "학기" ,b.hakbun "학번",b.std1 "전공1",b.std2 "전공2",b.std3 "전공3", 
+(std1+std2+std3) "합", (std1+std2+std3)/3 "평균"
+from test_student_master a, test_student_test b
+where a.hakbun=b.hakbun
+order by (std1+std2+std3) desc;
+
+3문제 여기서 평균은 소수점 2자리까지 표시
+
+select a.name "이름",b.semester "학기" ,b.hakbun "학번",b.std1 "전공1",b.std2 "전공2",b.std3 "전공3", 
+(std1+std2+std3) "합", round((std1+std2+std3)/3,2) "평균"
+from test_student_master a, test_student_test b
+where a.hakbun=b.hakbun
+order by (std1+std2+std3) desc;
+
+round((숫자),(자릿수))
+
+4문제 학생마스터 테이블에서 학번을 기준으로 올림차순으로 출력 폼은
+학과명은 학과코드에서 가지고 온다.
+"학번 서명 주민번호 학과코드 학과명"
+
+select a.hakbun, a.name, a.jumin, b.dept, b.name
+from test_student_master a, test_dept_code b
+where a.dept = b.dept
+order by hakbun;
+
+5문제 학생마스터 테이블에서 상태 '1'만 선택하여 4번 문제와 같이 출력하라
+
+select a.hakbun, a.name, a.jumin, b.dept, b.name
+from test_student_master a, test_dept_code b
+where a.dept = b.dept and status=1
+order by hakbun;
+
+
+
+alter table test_student_master add(
+foreign key(dept) references test_dept_code(dept)
+);
+
+
+update test_student_test set std1=92, std2=94
+where semester=20222
+and hakbun=22002; 
+
+
+select a.hakbun, a.name, a.jumin, b.dept, b.name
+from test_student_master a, test_dept_code b
+where a.dept=b.dept
+order by hakbun;
+
+
+select a.hakbun, a.name, a.jumin, b.dept, b.name
+from test_student_master a, test_dept_code b
+where a.dept=b.dept and status=1
+order by hakbun;
+
+=========================================
+	
+=========================================
+
+select emp_id 사원번호, emp_name 성명,
+decode(emp_job,
+'10','인사',
+'20','회계',
+'30','전산','신입')"직무코드",
+nvl(emp_pay,0) 시간급여
+from emp_master;
+
+
+
+create sequence t03_number_seq
+start with 1001
+increment by 1
+nocycle;
+
+select t03_number_seq.nextval from dual;
+
+create table temp_03(
+t03_number number(6) primary key,
+t03_name varchar2(10),
+t03_phone varchar2(13),
+t03_indate date,
+t03_dept char(2)
+);
+
+insert into temp_03 values (t03_number_seq.nextval, '최석금','010-1234-5671','20210324','10');
+insert into temp_03 values (t03_number_seq.nextval, '김수현','010-0910-2351','20210325','11');
+insert into temp_03 values (t03_number_seq.nextval, '박선영','010-2300-8911','20210326','11');
+
+insert into temp_03 values (t03_number_seq.nextval, '홍길동','010-9034-5571-','20210424','20');  오류
+insert into temp_03 values (t03_number_seq.nextval, '김길동','010-1291-2351','20210405','21');
+insert into temp_03 values (t03_number_seq.nextval, '박길동','011-2323-3434','20210327','21');
+
+select t03_number_seq.nextval from dual;
+
+
+
+select a.hakbun, b.name
+from test_student_master a,test_dept_code b
+where a.dept=b.dept;
+
+select hakbun, (select name from test_dept_code where dept = s.dept) "NAME"
+from test_student_master s;
+
+
+select      rpad        ('성일고2학년12반',   25,     '*'        )from dual;
+         오른쪽기준            입력값          전체       공백을 *로 표시             
+
+
+select trim(' 성일고2학년 12반 ')from dual;
+select rtrim(' 성일고2학년 12반 ')||'ok' from dual;
+select ' 성일고2학년 12반           '||'ok'from dual;
+select trim('a' from 'aa성일고2학년 a 12반aa')from dual;
+
+select rpad('성일고2학년12반',25,'*')from dual;
+select lpad('성일고2학년12반',25,'*')from dual;
+
+select rpad('성일고2학년12반',25,'*') ||'^^'|| lpad('성일고2학년12반',25,'*')from dual;
+select lpad('성일고2학년12반',25,'*') ||'^^'|| rpad('성일고2학년12반',25,'*')from dual;
+
+select emp_name || 'ok' from emp_master;
+
+select * from test_student_master;
+
+create table temp_10 (
+t10_01 char(10) primary key,
+t10_02 char(10),
+t10_03 varchar2(10),
+t10_04 varchar2(10),
+t10_05 number(10)
+);
+
+insert into temp_10 values ('111111','SunGHs','333331','sorTBubble',12341);
+
+insert into temp_10 values ('111112','SunGHs','333331','sorTBubble',12341);
+insert into temp_10 values ('111113','SunGHs','333331','sorTBubble',12341);
+insert into temp_10 values ('111114','SunGHs','333331','sorTBubble',12341);
+
+
+
+
+
+char(n)
+정해진 값의 크기를 공백에 관계없이 절대값을 가진다
+varchar2(n)
+정해진 값의 크기에 뒤에 남아있는 공백의 크기는 제외된 가변적으로 가진다
+
+LOWER (c1) : (c1)의 지정된 문자를 소문자로 변환한다
+UPPER (c1) : (c1)의 지정된 문자를 대문자로 변환한다
+
+INSTR(c1, 지정문자) : c1(문자열)의 지정 문자의 위피를 반환
+INSTR(c1, 지정문자, n1, n2) : 시작 자릿수 n1이 -1이면 뒤에서 부터 검색을 하나 지절 문자의 순서는
+앞에서 하는 거와 같아c1(문자열)을 지정 문자 n1 위치에서 검색하여 n2 위치에 나타나는 지정 문자의 순서
+
+
+create table temp_10 (
+t10_01 char(10) primary key,
+t10_02 char(10),
+t10_03 varchar2(10),
+t10_04 varchar2(10),
+t10_05 number(10)
+);
+
+insert into temp_10 values ('111111','SunGHs','3333331','sorTBubble',12341);
+insert into temp_10 values ('111112','sUNgHS','3333332','sortMerge',12342);
+insert into temp_10 values ('111113','s215hs','3333333','dboracle',12343);
+insert into temp_10 values ('111114','singhs2','3333334','daTaBase',12344);
+
+select t10_01 from temp_10;
+select t10_01||'ok' from temp_10;
+select t10_03||'ok' from temp_10;
+select RTRIM(t10_01)||'ok' from temp_10;
+select LTRIM(' 성일고2학년 12반 ')||'OK' from dual;
+대소문자 
+select LOWER(t10_02), UPPER(t10_02) from temp_10;
+
+select *
+from temp_10
+where LOWER(t10_04) = 'sortbubble'
+or LOWER(t10_04) = 'database';
+
+
+숫자 함수
+ABS
+ROUND
+FLOOR
+TRUNC
+SIGN
+CEIL
+MOD
+POWER
+
+INSTR(c1, 지정문자, n1, n2) : 시작 자릿수 n1이 -1이면 뒤에서 부터 검색을 하나 지절 문자의 순서는 앞에서 하는 거와 같아
+c1(문자열)을 지정 문자 n1 위치에서 검색하여 n2 위치에 나타나는 지정 문자의 순서
+
+c1(전채) 지정문자(찾는거) n1(어디부터 검색) n2(몇번째꺼)
+
+select INSTR('123456789A123456789B12345','7',1,1) from dual;
+select INSTR('123456789A123456789B12345','7',-1,1) from dual;
+select INSTR('123456789A123456789B12345','3',4,1) from dual;
+select INSTR('123456789A123456789B12345','3',4,2) from dual;
+select INSTR('123456789A123456789B12345','3',4,3) from dual;
+
+select INITCAP(t10_02) from temp_10;
+INITCAP(지정된 문자열의 첫 단어를 대문자로 나머지는 소문자로 바환한다
+
+SUBSTR 지정된 위치부터 지정한 개수만큼의 문자를 반환한다
+SUBSTR(c1,n1,n2) 지정된 c1의 문자열 을 n1의 위치에서 n2만큼 반환
+SUBSTR(c1n1) 두 번째 숫자 생략 시는 마지막 문자까지 반환
+
+select SUBSTR(t10_02,1,4) from temp_10;
+select SUBSTR(t10_02,1) from temp_10;
+
+
+select t10_01, length(t10_01),length(t10_02),length(t10_03),length(t10_04),length(t10_05) from temp_10;
+
+
+REPLACE
+select REPLACE('Data Base Mysql','MySql','Oracle') from dual;
+
+
+create table TBL_JUMIN_TEST (
+jumin varchar2(20) primary key,
+name varchar2(15),
+phone varchar2(15),
+address varchar2(50)
+);
+
+insert into tbl_jumin_test values('7101011000001','김주민','01011111111','경기도 성남시 수정구 태평1동');
+insert into tbl_jumin_test values('7201012000001','이주민','01011112222','경기도 성남시 수정구 태평2동');
+insert into tbl_jumin_test values('7301011000001','박주민','01011113333','경기도 성남시 수정구 복정동');
+insert into tbl_jumin_test values('7401012000001','홍주민','01011114444','경기도 성남시 수정구 산성동');
+insert into tbl_jumin_test values('7501011000001','조주민','01011115555','경기도 성남시 수정구 성남동');
+insert into tbl_jumin_test values('0601014000001','최주민','01011116666','경기도 성남시 수정구 중앙동');
+insert into tbl_jumin_test values('0701013000001','정주민','01011117777','경기도 성남시 수정구 상대원동');
+insert into tbl_jumin_test values('0801014000001','장주민','01011118888','경기도 성남시 수정구 하대원동');
+insert into tbl_jumin_test values('0901013000001','강주민','01011119999','경기도 성남시 수정구 야탑1동');
+insert into tbl_jumin_test values('0001014000001','신주민','01022221111','경기도 성남시 수정구 야탑2동');
+
+
+select substr(phone,1,3)||'-'||substr(phone,4,4)||'-'||substr(phone,8,4) phone,name from tbl_jumin_test;
+
+
+select substr(jumin,1,6)||'-'||substr(jumin,7,13) jumin,
+decode(substr(jumin,7,1),
+'1','남',
+'2','여',
+'3','남',
+'4','여',
+'?성') gender, name 
+from tbl_jumin_test;
+
+
+
+select substr(jumin,1,6)||'-'||substr(jumin,7,13) jumin,
+decode(substr(jumin,7,1),
+'1','남',
+'2','여',
+'3','남',
+substr(jumin,7,1)) gender, name 
+from tbl_jumin_test;
+
+
+또다른 버전
+select substr(jumin,1,6)||'-'||substr(jumin,7,13) jumin,
+case when substr(jumin,7,1)in('1','3','5') then '남' else '여' end gender, name 
+from tbl_jumin_test;
+
+
+
+
+
+
+
+
+
+select to_char(sysdate,'yyyy-mm-dd') from dual;
+
+
+나이
+select to_number(to_char(sysdate,'yyyy'))-2006 "나이" from dual;
+만 나이
+select to_number(to_char(sysdate,'yyyy'))-2006-1 "만 나이" from dual;
+
+
+
+
+select case when substr(jumin,7,1) in ('1','2','5','6') then '19' else '20' end
+||substr(jumin,1,2)||'년'||substr(jumin,3,2)||'월'||substr(jumin,5,2)||'일생' "birth",
+'만'||(to_char(sysdate,'yyyy') - 
+(case when substr(jumin,7,1) in ('1','2','5','6') then '19' else '20' end||substr(jumin,1,2))-1)||'살' "avg",name
+from tbl_jumin_test;
+
+
+또다른 버전
+
+select case when substr(jumin,7,1) in ('1','2','5','6') then '19' else '20' end
+||substr(jumin,1,2)||'년'||substr(jumin,3,2)||'월'||substr(jumin,5,2)||'일생' birth,
+'만'||floor(months_between(sysdate, to_date((case when substr(jumin,7,1) in ('1','2','5','6') then '19' else '20' end)
+||substr(jumin,1,6), 'yyyymmdd'))/12)||'세' age, name from tbl_jumin_test;
+
+
+
+
+
+
+select t10_01, length(t10_01),length(t10_02),length(t10_03),length(t10_04),length(t10_05) from temp_10;
+
+select REPLACE('Data Base Mysql','MySql','Oracle') from dual;
+
+abs
+select abs(-10) from dual;
+
+round
+select round(1234.567,1) from dual;
+select round(1234.567,-1) from dual;
+select round(1234.567,-2) from dual;
+select round(1234.567) from dual;
+
+floor
+select floor(123.45) from dual;
+select floor(-123.45) from dual;
+select floor(0.45) from dual;
+select floor(-.45) from dual;
+select floor(-1.349) from dual;
+
+trunc
+select trunc(1234.567,1) from dual;
+select trunc(1234.567,-1) from dual;
+select trunc(1234.567) from dual;
+
+sign
+select sign(10) from dual;
+select sign(-10) from dual;
+select sign(0) from dual;
+select sign(null) from dual;
+select nvl(sign(null),99) from dual;
+
+ceil
+select ceil(12.5) from dual;
+select ceil(-12.5) from dual;
+select ceil(0.5) from dual;
+select ceil(-0.5) from dual;
+select ceil(null) from dual;
+
+mod
+select mod(10,3) from dual;
+select mod(3,10) from dual;
+select trunc(174/60) ||'분 '||mod(174,60) ||'초'  "시간"from dual;
+
+
+21시간4분21초
+
+select trunc(trunc(75861/60)/60)||'시간' from dual;
+select trunc(75861/60)||'시간' from dual;
+
+with time_ss 
+as (select &p_n as num from dual)
+select trunc(num/(60*60)) ||'시간'||mod(trunc(num/60),60)||'분'||mod(num,60)||'초' 
+from time_ss;
+
+select '2022년' || lpad(level,2,0) || '월' as No from dual
+connect by level <=12;
+
+
+
+with loop_gcm 
+as (select &p_n1 as num1, &p_n2 as num2 from dual)
+select max(level) as gcm from loop_gcm
+where mod(num1,level)=0 and mod(num2,level)=0
+connect by level <=num2;
+
+또 다른 버전
+WITH nums AS (
+  SELECT &num1 AS num1, &num2 AS num2 FROM dual
+),
+rs(n, num1, num2, rem) AS (
+  SELECT 1, num1, num2, MOD(num1, num2)
+  FROM nums
+  UNION ALL
+  SELECT n + 1, num2, rem, MOD(num2, rem)
+  FROM rs
+  WHERE rem > 0
+),
+gcd AS (
+  SELECT num2, ROW_NUMBER() OVER (ORDER BY n DESC) rn
+  FROM rs
+  WHERE rem = 0
+)
+SELECT num2 as gcd FROM gcd WHERE rn = 1;
+
+
+
+
+with loop_icm 
+as (select &p_n1 as num1, &p_n2 as num2 from dual)
+select num1,num2, max(level) as lcm from loop_icm
+where mod(num1,level)=0 and mod(num2,level)=0
+connect by level <=num2;
+
+
+
+with loop_Icm 
+as (select &p_n1 as num1, &p_n2 as num2 from dual)
+select num1,num2, 
+(num1/max(level)) * (num2/(max(level)) * max(level) as LCM from loop_Icm 
+where mod(num1,level)=0 and mod(num2,level)=0
+connect by level <=num2;
+
+
+select power(2,0) from dual;
+select power(2,1) from dual;
+select power(2,2) from dual;
+select power(2,8) from dual;
+select power(2,-1) from dual;
+select power(2,-2) from dual;
+
+
+
+
+select sysdate - 1 from dual;
+select sysdate + 1 from dual;
+
+select sysdate - to_date('20210101','yyyymmdd') from dual;
+select sysdate + to_date('20210101','yyyymmdd') from dual;
+날짜와 날짜를 더할 수는 없다
+날짜 - 날짜=가능   날짜 + 날짜=불가능
+
+
+select sysdate - to_date('20061222','yyyymmdd') from dual;
+select to_date(to_char(sysdate,'yyyymmdd'),'yyyymmdd') - to_date('20061222','yyyymmdd') from dual;
+select to_date(to_char(sysdate,'yyyymmdd'),'yyyymmdd') - to_date('20210101','yyyymmdd') from dual;
+
+
+select add_months(sysdate,1) from dual;
+select add_months(sysdate,-3) from dual;
+
+select months_between(sysdate,'20061222') from dual;
+
+select months_between(sysdate,to_date('20061222','yyyymmdd')) from dual;
+
+select sysdate-to_date('20061222','yymmdd') from dual;
+
+select months_between(sysdate,to_date('20061222','yyyymmdd')) from dual;
+
+select sysdate-to_date('20061222','yyyymmdd') from dual;
+
+
+
+
+select (after_time - before_time)||'일' from
+( select to_date('2006-12-22','yyyy-mm-dd')as before_time,
+to_date('2021-05-24','yyyy-mm-dd') as after_time
+from dual);
+
+
+
+
+select trunc(trunc(months_between(sysdate,to_date('20061222','yyyymmdd')))/12) year,
+trunc(mod(months_between(sysdate,to_date('20061222','yyyymmdd')), 12))mon
+from dual;
+
+
+select trunc(trunc(months_between(sysdate,to_date('20061222','yyyymmdd')))/12) year,
+trunc(mod(months_between(sysdate,to_date('20061222','yyyymmdd')), 12))mon
+from dual;
+
+
+select trunc(months_between(after_time,before_time)/12)
+||'년 '||
+trunc(mod(months_between(after_time, before_time),12))
+||'개월 '
+from 
+(
+select to_date('2006-12-22','yyyy-mm-dd') as before_time,
+to_date('2023-05-25','yyyy-mm-dd') as after_time
+from dual
+);
+
+
+
+
+select trunc(months_between(after_time,before_time)/12)||'년 '||
+trunc(mod(months_between(after_time, before_time),12))||'개월 '||
+trunc((after_time - before_time)/365)||'일' as "생년월일"
+from (select to_date('2006-12-22','yyyy-mm-dd') as before_time,to_date('2023-05-25','yyyy-mm-dd') as after_time
+from dual);
+
+
+
+select to_date('2021-05-05','yyyy-mm-dd'), to_date('2004-01-01','yyyy-mm-dd') from dual;
+
+
+
+select trunc(months_between(after_time,before_time)/12)||
+trunc(((mod(months_between(after_time,before_time),12)/12)+0.00009),4)||'년'
+from (select to_date('2004-01-01','yyyy-mm-dd') as before_time,to_date('2021-05-05','yyyy-mm-dd') as after_time
+from dual);
+
+
+
+select trunc(months_between(after_time,before_time)/12)||
+trunc(((mod(months_between(after_time,before_time),12)/12)+0.00009),4)||'년'
+from (select to_date('2004-01-01','yyyy-mm-dd') as before_time,to_date('2021-05-10','yyyy-mm-dd') as after_time
+from dual);
+
+
+select trunc(months_between(after_time,before_time)/12)||
+(mod(months_between(after_time,before_time),12)/12)||'년'
+from (select to_date('2004-01-01','yyyy-mm-dd') as before_time,to_date('2021-05-10','yyyy-mm-dd') as after_time
+from dual);
+
+
+
+
+create table student_master_01 (
+hakbun number(5) primary key,
+name varchar2(20),
+dept char(3),
+year number(1),
+idate varchar2(4),
+city varchar2(2),
+phone varchar2(13)
+);
+
+create table dept_code_00 (
+dept char(3) primary key,
+name varchar2(20)
+);
+
+create table city_code_00 (
+city varchar2(3) primary key,
+name varchar2(10)
+);
+
+21204 sequence
+Create sequence hakbun_seq
+start with 21001
+increment by 1
+nocycle;
+
+
+insert into student_master_01 values (hakbun_seq.nextval,'문용채','210','1','2021','10','010-1234-2345');
+insert into student_master_01 values (hakbun_seq.nextval,'강석기','210','1','2021','20','010-2922-2345');
+insert into student_master_01 values (hakbun_seq.nextval,'최석금','220','3','2019','20','010-2678-0971');
+insert into student_master_01 values (hakbun_seq.nextval,'박선영','230','3','2019','10','010-7732-0912');
+insert into student_master_01 values (hakbun_seq.nextval,'김규인','240','2','2020','40','010-3434-9823');
+insert into student_master_01 values (hakbun_seq.nextval,'정태진','230','2','2020','30','010-9875-2345');
+
+
+insert into dept_code_00 values ('200','컴퓨터공학과');
+insert into dept_code_00 values ('210','수학과');
+insert into dept_code_00 values ('220','물리학과');
+insert into dept_code_00 values ('230','영문과');
+insert into dept_code_00 values ('240','국문학과');
+insert into dept_code_00 values ('250','응용미술학과');
+
+
+insert into city_code_00 values ('10','서울');
+insert into city_code_00 values ('20','경기');
+insert into city_code_00 values ('30','수원');
+insert into city_code_00 values ('40','성남');
+insert into city_code_00 values ('50','안성');
+insert into city_code_00 values ('60','평택');
+
+
+
+select a.hakbun "학번", a.year "학년", a.idate "입학년도", b.dept "학과코드", b.name "학과명",
+c.city "거주지코드",c.name "거주지명" 
+from student_master_01 a, dept_code_00 b, city_code_00 c
+where a.city=c.city and a.dept=b.dept
+order by a.hakbun;
+
+
+
+
+
+-------------------------------------------------------------------------
+			뷰 테이블
+-------------------------------------------------------------------------
+
+
+
+
+
+
+create view student_master_view
+as select a.hakbun "학번", a.year "학년", a.idate "입학년도", b.dept "학과코드", b.name "학과명",
+c.city "거주지코드",c.name "거주지명", a.phone "전화번호"
+from student_master_01 a, dept_code_00 b, city_code_00 c
+where a.city=c.city and a.dept=b.dept
+order by a.hakbun;
+
+select * from student_master_view;
+view student_master_view
+
+select * from student_master_view where "학년"= '3';
+
+select a.*, b.phone from student_master_view a, student_master_01 b 
+where "학번" = b.hakbun;
+
+create view test_view2
+as select a.*, b.phone "전화번호" from student_master_view a, student_master_01 b 
+where "학번" = b.hakbun;
+
+select * from test_view2;
+
+
+
+
+
+
+create table r(
+r_no number(3),
+r_name varchar2(20)
+);
+
+insert into r values(100,'정소화');
+insert into r values(200,'김선우');
+insert into r values(300,'고명석');
+
+create table s(
+s_no number(3),
+s_name varchar2(20)
+);
+
+insert into s values(100,'정소화');
+insert into s values(101,'채광주');
+insert into s values(102,'김수진');
+
+
+select * from r
+union all
+select * from s;
+
+select * from r
+union
+select * from s;
+
+
+select * from r
+intersect
+select * from s;
+
+select r_name from r where r_name like '김%' 
+intersect                                             
+select s_name from s where s_name like '김%' ;
+
+select substr(r_name,1,1)from r 
+intersect
+select substr(s_name,1,1)from s ;
+
+
+select * from r
+minus
+select * from s;
+
+select * from s
+minus
+select * from r;
+
+
+select * from r,s;
+
+
+select a.custno,a.custname,a.grade,b.pcost
+from member_tbl_02  a, money_tbl_02 b
+where a.custno=b.custno;
+
+
+select a.custno, a.custname, decode(a.grade,'A','VIP','B','일반','C','직원') grade, sum(price) price
+from member_tbl_02 a, money_tbl_02 b
+where a.custno = b.custno
+group by a.custno, a.custname, a.grade
+order by price desc;
+
+
+
